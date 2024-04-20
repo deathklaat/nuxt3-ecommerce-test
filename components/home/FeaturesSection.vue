@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { AwardIcon, ShieldCheckIcon, TruckIcon } from 'lucide-vue-next';
 
 type FeatureItem = {
@@ -25,19 +25,17 @@ function getFeatureIcon(iconName: string) {
 
 <template>
   <section
-    class="container xl:max-w-[1116px] px-0 pt-[88px] pb-12 mx-auto flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-0 lg:justify-between lg:items-start"
+    class="container mx-auto flex flex-col items-center justify-center gap-8 border-b px-0 pb-12 pt-[88px] lg:flex-row lg:items-start lg:justify-between lg:gap-0 lg:border-none xl:max-w-[1116px]"
   >
     <div
       v-for="(feature, index) in props.items"
       :key="index"
-      class="flex flex-col items-center lg:items-start text-center lg:text-left max-w-[328px]"
+      class="flex max-w-[328px] flex-col items-center text-center lg:items-start lg:text-left"
     >
-      <div
-        class="bg-white-100 rounded-full w-12 h-12 flex items-center justify-center mb-6"
-      >
+      <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-white-100">
         <component :is="getFeatureIcon(feature.icon)" class="size-5" />
       </div>
-      <div class="text-h5-lg font-semibold text-black-800 mb-3">
+      <div class="mb-3 text-h5-lg font-semibold text-black-800">
         {{ feature.title }}
       </div>
       <div class="text-body-lg text-black-500">

@@ -20,10 +20,7 @@ const props = defineProps<{
 <template>
   <NavigationMenu>
     <NavigationMenuList>
-      <NavigationMenuItem
-        v-for="(link, index) in props.links"
-        :key="`link-${index}`"
-      >
+      <NavigationMenuItem v-for="(link, index) in props.links" :key="`link-${index}`">
         <template v-if="link.href">
           <NuxtLink :to="link.href">
             <NavigationMenuLink :class="navigationMenuTriggerStyle()">
@@ -41,10 +38,7 @@ const props = defineProps<{
                 :to="subLink.href"
                 class="px-4 py-3 hover:bg-accent/50 w-full"
               >
-                <NavigationMenuLink
-                  :class="navigationMenuTriggerStyle()"
-                  as-child
-                >
+                <NavigationMenuLink :class="navigationMenuTriggerStyle()" as-child>
                   {{ subLink.text }}
                 </NavigationMenuLink>
               </NuxtLink>

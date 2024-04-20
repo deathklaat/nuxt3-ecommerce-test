@@ -28,9 +28,7 @@ function selectTab(tab: Tabs) {
 </script>
 
 <template>
-  <section
-    class="container xl:max-w-[1116px] mx-auto px-0 pt-[152px] pb-[176px]"
-  >
+  <section class="container xl:max-w-[1116px] mx-auto px-0 pt-[152px] pb-[80px] lg:pb-[176px]">
     <div class="w-full flex items-center justify-center gap-6">
       <div
         v-for="tab in tabs"
@@ -42,7 +40,7 @@ function selectTab(tab: Tabs) {
         <span>{{ tab }}</span>
       </div>
     </div>
-    <div class="flex items-center justify-between mt-12">
+    <div class="flex flex-col lg:flex-row items-center justify-between mt-12">
       <ProductCard v-for="item in activeItems" :key="item.id" v-bind="item" />
     </div>
   </section>

@@ -17,9 +17,7 @@ const { isTabletOrDesktop } = useResolution();
     <div class="flex items-center gap-24">
       <NuxtLink to="/" class="flex gap-2 items-center">
         <NuxtImg alt="logo" src="/logo.svg" class="w-8 lg:w-10" />
-        <span
-          class="font-manrope text-h3-sm lg:text-[20px] text-black-900 font-extrabold"
-        >
+        <span class="font-manrope text-h3-sm lg:text-[20px] text-black-900 font-extrabold">
           Ecommerce
         </span>
       </NuxtLink>
@@ -32,11 +30,15 @@ const { isTabletOrDesktop } = useResolution();
         <ShoppingCartIcon class="size-5 text-muted-foreground cursor-pointer" />
       </NuxtLink>
       <NuxtLink to="/">
-        <CircleUserRoundIcon
-          class="size-5 text-muted-foreground cursor-pointer"
-        />
+        <CircleUserRoundIcon class="size-5 text-muted-foreground cursor-pointer" />
       </NuxtLink>
     </div>
     <MobileMenu v-if="!isTabletOrDesktop" />
   </header>
 </template>
+
+<style>
+#mobile-menu:empty {
+  visibility: hidden;
+}
+</style>

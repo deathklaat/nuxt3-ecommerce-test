@@ -1,7 +1,8 @@
 export enum Colors {
-  Blue = 'blue-400',
-  Yellow = 'yellow-400',
-  Green = 'green-400',
+  Blue = 'blue',
+  Yellow = 'yellow',
+  Green = 'green',
+  Red = 'red',
 }
 
 export enum Sizes {
@@ -10,4 +11,20 @@ export enum Sizes {
   Large = 'L',
   ExtraLarge = 'XL',
   ExtraExtraLarge = 'XXL',
+}
+
+export enum Categories {
+  Perfume,
+  Trousers,
+  Shoe,
+  Handbag,
+  Hat,
+  Thermos,
+}
+
+export enum SortOptions {
+  CheapFirst,
+  ExpensiveFirst,
+  Popular,
+  Newest,
 }

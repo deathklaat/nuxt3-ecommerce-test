@@ -26,11 +26,7 @@ watch(menuIsOpened, (newValue) => {
         <div class="absolute bottom-4 w-full flex items-center justify-center">
           <CircleXIcon class="size-12" @click="menuIsOpened = false" />
         </div>
-        <Accordion
-          type="single"
-          class="w-full text-left px-4 py-8 flex flex-col gap-4"
-          collapsible
-        >
+        <Accordion type="single" class="w-full text-left px-4 py-8 flex flex-col gap-4" collapsible>
           <AccordionItem
             v-for="(item, i) in navigationData"
             :key="`item-${i}`"
@@ -41,7 +37,7 @@ watch(menuIsOpened, (newValue) => {
             }"
           >
             <template v-if="item.hrefs">
-              <AccordionTrigger class="pt-0 pb-4 border-b">
+              <AccordionTrigger class="p-0 border-b">
                 {{ item.text }}
               </AccordionTrigger>
               <AccordionContent>

@@ -3,8 +3,8 @@ import BreadCrumbs from '~/components/common/BreadCrumbs.vue';
 import ProductComponent from '~/components/product/ProductComponent.vue';
 
 const route = useRoute();
-const productStore = useProductStore();
-const data = productStore.getProductById(+route.params.id)!;
+const store = useProductStore();
+const data = store.getProductBySlug(route.params.slug as string)!;
 const breadcrumbs = computed(() => [
   {
     text: 'Ecommerce',

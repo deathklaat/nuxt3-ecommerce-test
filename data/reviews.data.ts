@@ -4,8 +4,7 @@ export default [
     lastName: 'Davis',
     publishedAt: '2024-03-21 12:00:00',
     rating: 4,
-    content:
-      'This company always goes above and beyond to satisfy their customers.',
+    content: 'This company always goes above and beyond to satisfy their customers.',
   },
   {
     firstName: 'Daniel',

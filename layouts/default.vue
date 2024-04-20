@@ -9,6 +9,6 @@ import FooterContainer from '~/components/common/FooterContainer.vue';
     <NotificationBar />
     <HeaderContainer />
     <slot />
-    <FooterContainer v-if="false" />
+    <FooterContainer />
   </div>
 </template>

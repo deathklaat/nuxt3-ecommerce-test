@@ -1,4 +1,4 @@
-import { Colors, Sizes } from '~/data/enums';
+import { Categories, Colors, Sizes, SortOptions } from '~/data/enums';
 
 export type ProductReview = {
   firstName: string;
@@ -16,9 +16,31 @@ export type ProductData = {
   colors: Colors[];
   sizes: Sizes[];
   reviews: ProductReview[];
+  category: Categories;
   description: string;
   inStock: boolean;
   isBestSeller: boolean;
   isFeatured: boolean;
   createdAt: string;
 };
+
+export type OrderParams = {
+  productId: number;
+  size: Sizes;
+  color: Colors;
+  quantity: number;
+};
+
+export type SearchFilters = {
+  query: string;
+  priceRange: [number, number];
+  categories?: Categories[];
+  colors?: Colors[];
+  sizes?: Sizes[];
+  sortOption?: SortOptions;
+};
+
+export type AppliedSearchFilters = Pick<
+  SearchFilters,
+  'categories' | 'colors' | 'sizes' | 'priceRange'
+>;

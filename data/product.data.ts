@@ -1,4 +1,4 @@
-import { Colors, Sizes } from '~/data/enums';
+import { Categories, Colors, Sizes } from '~/data/enums';
 import reviewsData from '~/data/reviews.data';
 import type { ProductData } from '~/types/product.type';
 
@@ -10,6 +10,7 @@ const data: ProductData[] = [
     price: 35,
     colors: [Colors.Blue, Colors.Yellow, Colors.Green],
     sizes: [Sizes.Small, Sizes.Medium, Sizes.Large],
+    category: Categories.Perfume,
     inStock: true,
     isBestSeller: true,
     isFeatured: false,
@@ -35,6 +36,7 @@ const data: ProductData[] = [
     price: 27,
     colors: [Colors.Blue, Colors.Yellow, Colors.Green],
     sizes: [Sizes.Small, Sizes.Large, Sizes.ExtraLarge],
+    category: Categories.Handbag,
     inStock: true,
     isBestSeller: true,
     isFeatured: false,
@@ -60,6 +62,7 @@ const data: ProductData[] = [
     price: 22,
     colors: [Colors.Blue, Colors.Yellow, Colors.Green],
     sizes: [Sizes.Medium, Sizes.Large, Sizes.ExtraLarge],
+    category: Categories.Thermos,
     inStock: true,
     isBestSeller: true,
     isFeatured: false,
@@ -85,6 +88,7 @@ const data: ProductData[] = [
     price: 43,
     colors: [Colors.Blue, Colors.Yellow, Colors.Green],
     sizes: [Sizes.Large, Sizes.ExtraExtraLarge],
+    category: Categories.Trousers,
     inStock: true,
     isBestSeller: true,
     isFeatured: false,
@@ -110,6 +114,7 @@ const data: ProductData[] = [
     price: 35,
     colors: [Colors.Blue, Colors.Yellow, Colors.Green],
     sizes: [Sizes.Medium, Sizes.Large, Sizes.ExtraLarge],
+    category: Categories.Shoe,
     inStock: true,
     isBestSeller: false,
     isFeatured: true,
@@ -135,6 +140,7 @@ const data: ProductData[] = [
     price: 57,
     colors: [Colors.Blue, Colors.Yellow, Colors.Green],
     sizes: [Sizes.Small, Sizes.Medium, Sizes.Large],
+    category: Categories.Hat,
     inStock: true,
     isBestSeller: false,
     isFeatured: true,
@@ -160,6 +166,7 @@ const data: ProductData[] = [
     price: 19,
     colors: [Colors.Blue, Colors.Yellow, Colors.Green],
     sizes: [Sizes.Small, Sizes.Medium, Sizes.Large, Sizes.ExtraLarge],
+    category: Categories.Perfume,
     inStock: true,
     isBestSeller: false,
     isFeatured: true,
@@ -180,11 +187,12 @@ const data: ProductData[] = [
   },
   {
     id: 8,
-    title: 'Raw Black Tees',
+    title: 'MOCKUP Black',
     imgUrl: './images/products/product-id-8.jpg',
     price: 30,
     colors: [Colors.Blue, Colors.Yellow, Colors.Green],
     sizes: [Sizes.Small, Sizes.Medium, Sizes.Large, Sizes.ExtraLarge],
+    category: Categories.Thermos,
     inStock: true,
     isBestSeller: false,
     isFeatured: true,
