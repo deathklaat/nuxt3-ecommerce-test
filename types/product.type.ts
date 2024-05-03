@@ -40,7 +40,4 @@ export type SearchFilters = {
   sortOption?: SortOptions;
 };
 
-export type AppliedSearchFilters = Pick<
-  SearchFilters,
-  'categories' | 'colors' | 'sizes' | 'priceRange'
->;
+export type FilterType = 'categories' | 'colors' | 'sizes';

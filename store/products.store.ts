@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useSlugify } from '~/composables/slugify';
-import type { ProductData, SearchFilters } from '~/types/product.type';
+import type { FilterType, ProductData, SearchFilters } from "~/types/product.type";
 import productData from '~/data/product.data';
 import { SortOptions } from '~/data/enums';
 
@@ -57,6 +57,10 @@ export const useProductStore = defineStore('products', () => {
   const getProductBySlug = computed(() => (slug: string) => {
     const res = products.value.find((p) => toSlug(p.title) === slug)!;
     return res as ProductData;
+  });
+
+  const highestPrice = computed(() => {
+    return products.value.reduce((acc, val) => Math.max(acc, val.price), 0);
   });
 
   const searchResult = computed(() => {
@@ -120,16 +124,24 @@ export const useProductStore = defineStore('products', () => {
     return multipleResults;
   });
 
+  const removeFilter = (type: FilterType, value: any) => {
+    if (type === "categories" && filters.value.categories) {
+      filters.value.categories = filters.value.categories.filter((item) => item !== value);
+    }
+  };
+
   return {
     products,
     searchFilters: filters,
+    highestPrice,
     bestSellers,
     featuredProducts,
     latestProducts,
     similarProducts,
     getProductById,
     getProductBySlug,
-    setFilters,
     searchResult,
+    setFilters,
+    removeFilter,
   };
 });

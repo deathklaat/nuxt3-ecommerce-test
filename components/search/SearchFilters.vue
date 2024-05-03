@@ -8,14 +8,18 @@ const store = useProductStore();
 const route = useRoute();
 const router = useRouter();
 
-const priceMin = ref(12);
-const priceMax = ref(150);
+const priceMin = ref(0);
+const priceMax = ref(store.highestPrice);
 
 // categories
 const categories = Object.values(Categories).filter((v) => isNaN(Number(v)));
-
 const selectedCategories = ref<Record<string, boolean>>({});
-categories.forEach((category) => (selectedCategories.value[category.toString()] = false));
+
+resetCategories();
+
+function resetCategories() {
+  categories.forEach((category) => (selectedCategories.value[category.toString()] = false));
+}
 
 function getCategoryId(category: string | Categories) {
   return `category-${category.toString().toLowerCase()}`;
@@ -24,7 +28,12 @@ function getCategoryId(category: string | Categories) {
 // colors
 const colors = Object.keys(Colors).filter((v) => isNaN(Number(v)));
 const selectedColors = ref<Record<string, boolean>>({});
-colors.forEach((color) => (selectedColors.value[color.toString()] = false));
+
+resetColors();
+
+function resetColors() {
+  colors.forEach((color) => (selectedColors.value[color.toString()] = false));
+}
 
 function selectColor(color: string | Colors) {
   selectedColors.value[color] = !selectedColors.value[color];
@@ -33,7 +42,12 @@ function selectColor(color: string | Colors) {
 // sizes
 const sizes = Object.values(Sizes).filter((v) => isNaN(Number(v)));
 const selectedSizes = ref<Record<string, boolean>>({});
-sizes.forEach((color) => (selectedSizes.value[color.toString()] = false));
+
+resetSizes();
+
+function resetSizes() {
+  sizes.forEach((color) => (selectedSizes.value[color.toString()] = false));
+}
 
 function selectSize(size: Sizes) {
   selectedSizes.value[size] = !selectedSizes.value[size];
@@ -79,6 +93,33 @@ function applyFilters() {
 }
 
 applyFilters();
+
+watch(
+  () => store.searchFilters,
+  (newValue) => {
+    resetCategories();
+    if (newValue.categories?.length) {
+      newValue.categories.forEach((category: number) => {
+        selectedCategories.value[Categories[category]] = true;
+      });
+    }
+
+    if (newValue.colors?.length) {
+      // TODO: update filter
+    } else {
+      resetColors();
+    }
+
+    if (newValue.sizes?.length) {
+      // TODO: update filter
+    } else {
+      resetSizes();
+    }
+  },
+  {
+    deep: true,
+  }
+);
 </script>
 
 <template>
@@ -98,7 +139,7 @@ applyFilters();
             :checked="selectedCategories[category]"
             @update:checked="selectedCategories[category] = $event"
           />
-          <label class="text-body-lg text-black-600" :for="getCategoryId(category)">
+          <label :for="getCategoryId(category)" class="text-body-lg text-black-600">
             {{ category }}
           </label>
         </div>
@@ -111,8 +152,8 @@ applyFilters();
         <ProductColor
           v-for="(color, i) in colors"
           :key="i"
-          :color="color"
           :active="selectedColors[color]"
+          :color="color"
           @select="selectColor"
         />
       </div>
@@ -124,8 +165,8 @@ applyFilters();
         <ProductSize
           v-for="(size, i) in sizes"
           :key="i"
-          :size="size"
           :active="selectedSizes[size]"
+          :size="size"
           @select="selectSize"
         />
       </div>
@@ -135,10 +176,10 @@ applyFilters();
       <div class="text-body-lg font-medium text-black-900">Price</div>
       <div class="mt-6">
         <CustomMinMaxSlider
-          v-model:min-value="priceMin"
           v-model:max-value="priceMax"
-          :min="12"
-          :max="368"
+          v-model:min-value="priceMin"
+          :max="store.highestPrice"
+          :min="0"
         />
       </div>
     </div>
