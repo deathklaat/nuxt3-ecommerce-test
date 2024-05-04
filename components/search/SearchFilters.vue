@@ -54,6 +54,7 @@ function selectSize(size: Sizes) {
 }
 
 const searchQuery = computed(() => decodeURIComponent(route.query.query as string));
+
 watch(
   searchQuery,
   () => {
@@ -104,21 +105,27 @@ watch(
       });
     }
 
+    resetColors();
     if (newValue.colors?.length) {
-      // TODO: update filter
-    } else {
-      resetColors();
+      newValue.colors.forEach((color) => {
+        const key = Object.entries(Colors).find(([_, value]) => value === color)![0];
+        selectedColors.value[key] = true;
+      });
     }
 
+    resetSizes();
     if (newValue.sizes?.length) {
-      // TODO: update filter
-    } else {
-      resetSizes();
+      newValue.sizes.forEach((size) => (selectedSizes.value[size] = true));
+    }
+
+    if (newValue.priceRange?.length && newValue.priceRange[1] > 0) {
+      priceMin.value = newValue.priceRange[0];
+      priceMax.value = newValue.priceRange[1];
     }
   },
   {
     deep: true,
-  }
+  },
 );
 </script>
 

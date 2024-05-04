@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { Categories } from '~/data/enums';
+import { Categories, SortOptions } from '~/data/enums';
 import { XIcon } from 'lucide-vue-next';
-import type { AppliedSearchFilters, FilterType, SearchFilters } from "~/types/product.type";
+import type { FilterType, SearchFilters } from '~/types/product.type';
+import SortSelect from '~/components/search/SortSelect.vue';
 
 const store = useProductStore();
 const products = computed(() => store.searchResult);
+
 const appliedFilters = computed(() => {
   const { categories, colors, sizes, priceRange } = store.searchFilters;
   const result = [];
@@ -41,9 +43,17 @@ const appliedFilters = computed(() => {
   return result;
 });
 
+const sortOption = ref<SortOptions>();
+// TODO: handle sort option change
+watch(sortOption, (newValue) => {
+  alert(newValue);
+});
+
 function resetFilters() {
-  const filters = {} as SearchFilters;
-  store.setFilters(filters);
+  const filters = {
+    priceRange: [0, store.highestPrice],
+  };
+  store.setFilters(filters as SearchFilters);
 }
 
 function removeFilter(type: FilterType, value: any) {
@@ -52,8 +62,9 @@ function removeFilter(type: FilterType, value: any) {
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <div v-if="appliedFilters.length" class="flex flex-col gap-3">
+  <div class="flex flex-col w-full">
+    <div v-if="appliedFilters.length > 1" class="flex flex-col gap-3">
+      {{ appliedFilters }}
       <div class="relative text-body-lg font-medium text-black-900">
         Applied filters:
         <div
@@ -103,9 +114,9 @@ function removeFilter(type: FilterType, value: any) {
     </div>
     <div class="flex justify-between mt-6 w-full flex-grow">
       <div>{{ products.length }} products found</div>
-      <div>SORT BY v</div>
+      <SortSelect v-model="sortOption" />
     </div>
-    <div class="flex flex-wrap mt-4">
+    <div v-if="products.length" class="flex flex-wrap mt-4">
       <ProductCard v-for="card in products" :key="card.id" v-bind="card" />
     </div>
   </div>

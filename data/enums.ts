@@ -23,8 +23,8 @@ export enum Categories {
 }
 
 export enum SortOptions {
-  CheapFirst,
-  ExpensiveFirst,
-  Popular,
-  Newest,
+  CheapFirst = 'Cheap first',
+  ExpensiveFirst = 'Expensive first',
+  Popular = 'Popular',
+  Newest = 'Newest',
 }

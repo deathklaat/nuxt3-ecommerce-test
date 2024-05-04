@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useSlugify } from '~/composables/slugify';
-import type { FilterType, ProductData, SearchFilters } from "~/types/product.type";
+import type { FilterType, ProductData, SearchFilters } from '~/types/product.type';
 import productData from '~/data/product.data';
 import { SortOptions } from '~/data/enums';
 
@@ -120,13 +120,20 @@ export const useProductStore = defineStore('products', () => {
     for (let i = 0; i < 20; i++) {
       multipleResults.push(...result);
     }
-
     return multipleResults;
   });
 
   const removeFilter = (type: FilterType, value: any) => {
-    if (type === "categories" && filters.value.categories) {
+    if (type === 'categories' && filters.value.categories) {
       filters.value.categories = filters.value.categories.filter((item) => item !== value);
+    }
+
+    if (type === 'colors' && filters.value.colors) {
+      filters.value.colors = filters.value.colors.filter((item) => item !== value);
+    }
+
+    if (type === 'sizes' && filters.value.sizes) {
+      filters.value.sizes = filters.value.sizes.filter((item) => item !== value);
     }
   };
 
