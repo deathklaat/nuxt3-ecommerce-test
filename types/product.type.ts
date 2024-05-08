@@ -31,13 +31,13 @@ export type OrderParams = {
   quantity: number;
 };
 
-export type SearchFilters = {
+export type SearchParams = {
   query: string;
   priceRange: [number, number];
   categories?: Categories[];
   colors?: Colors[];
   sizes?: Sizes[];
-  sortOption?: SortOptions;
+  sortOrder?: SortOptions;
 };
 
 export type FilterType = 'categories' | 'colors' | 'sizes';

@@ -2,7 +2,11 @@
 import { Categories, Colors, Sizes, SortOptions } from '~/data/enums';
 import { Checkbox } from '~/components/ui/checkbox';
 import CustomMinMaxSlider from '~/components/common/CustomMinMaxSlider.vue';
-import type { SearchFilters } from '~/types/product.type';
+import type { SearchParams } from '~/types/product.type';
+
+const emit = defineEmits<{
+  change: [value: SearchParams]; // named tuple syntax
+}>();
 
 const store = useProductStore();
 const route = useRoute();
@@ -55,20 +59,10 @@ function selectSize(size: Sizes) {
 
 const searchQuery = computed(() => decodeURIComponent(route.query.query as string));
 
-watch(
-  searchQuery,
-  () => {
-    applyFilters();
-  },
-  {
-    immediate: true,
-  },
-);
-
 function applyFilters() {
-  const filters: SearchFilters = {
+  const filters: SearchParams = {
     query: !searchQuery.value || searchQuery.value === 'undefined' ? '' : searchQuery.value,
-    sortOption: SortOptions.Newest,
+    sortOrder: SortOptions.Newest,
     priceRange: [0, 0],
   };
 
@@ -90,12 +84,10 @@ function applyFilters() {
 
   filters.priceRange = [priceMin.value || 0, priceMax.value || 0];
 
-  store.setFilters(filters);
+  emit('change', filters);
 }
 
-applyFilters();
-
-watch(
+/*watch(
   () => store.searchFilters,
   (newValue) => {
     resetCategories();
@@ -126,7 +118,7 @@ watch(
   {
     deep: true,
   },
-);
+);*/
 </script>
 
 <template>

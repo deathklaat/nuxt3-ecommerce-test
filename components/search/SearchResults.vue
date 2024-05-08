@@ -1,70 +1,41 @@
 <script lang="ts" setup>
 import { Categories, SortOptions } from '~/data/enums';
 import { XIcon } from 'lucide-vue-next';
-import type { FilterType, SearchFilters } from '~/types/product.type';
+import type { FilterType, ProductData, SearchParams } from '~/types/product.type';
 import SortSelect from '~/components/search/SortSelect.vue';
 
-const store = useProductStore();
-const products = computed(() => store.searchResult);
+const props = defineProps<{
+  results: ProductData[];
+  filters: SearchParams;
+}>();
+
+const emit = defineEmits<{
+  'reset-filters': [];
+  'remove-filter': [value: { type: FilterType; value: any }];
+  'sort-change': [value: keyof typeof SortOptions];
+}>();
 
 const appliedFilters = computed(() => {
-  const { categories, colors, sizes, priceRange } = store.searchFilters;
-  const result = [];
-
-  if (categories?.length) {
-    result.push({
-      type: 'categories',
-      list: categories,
-    });
-  }
-
-  if (colors?.length) {
-    result.push({
-      type: 'colors',
-      list: colors,
-    });
-  }
-
-  if (sizes?.length) {
-    result.push({
-      type: 'sizes',
-      list: sizes,
-    });
-  }
-
-  if (priceRange?.length && (priceRange[0] !== 0 || priceRange[1] !== store.highestPrice)) {
-    result.push({
-      type: 'price',
-      min: priceRange[0],
-      max: priceRange[1],
-    });
-  }
-
-  return result;
+  return [];
 });
 
-const sortOption = ref<SortOptions>();
-// TODO: handle sort option change
-watch(sortOption, (newValue) => {
-  alert(newValue);
+const sortOption = ref<keyof typeof SortOptions>();
+watch(sortOption, (newOrder) => {
+  emit('sort-change', newOrder || 'Newest');
 });
 
 function resetFilters() {
-  const filters = {
-    priceRange: [0, store.highestPrice],
-  };
-  store.setFilters(filters as SearchFilters);
+  emit('reset-filters');
 }
 
 function removeFilter(type: FilterType, value: any) {
-  store.removeFilter(type, value);
+  emit('remove-filter', { type, value });
 }
 </script>
 
 <template>
   <div class="flex flex-col w-full">
-    <div v-if="appliedFilters.length > 1" class="flex flex-col gap-3">
-      {{ appliedFilters }}
+    <!--    <div v-if="appliedFilters.length > 1" class="flex flex-col gap-3">
       <div class="relative text-body-lg font-medium text-black-900">
         Applied filters:
         <div
@@ -111,13 +82,13 @@ function removeFilter(type: FilterType, value: any) {
           </template>
         </template>
       </div>
-    </div>
-    <div class="flex justify-between mt-6 w-full flex-grow">
-      <div>{{ products.length }} products found</div>
+    </div>-->
+    <div class="flex justify-between mt-6 w-full">
+      <div>{{ results.length }} products found</div>
       <SortSelect v-model="sortOption" />
     </div>
-    <div v-if="products.length" class="flex flex-wrap mt-4">
-      <ProductCard v-for="card in products" :key="card.id" v-bind="card" />
+    <div v-if="results.length" class="flex flex-wrap mt-4">
+      <ProductCard v-for="(card, index) in results" :key="`${card.id}-${index}`" v-bind="card" />
     </div>
   </div>
 </template>

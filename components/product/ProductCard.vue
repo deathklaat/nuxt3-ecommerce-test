@@ -10,9 +10,9 @@ const slug = toSlug(props.title);
 <template>
   <NuxtLink
     :to="`/products/${slug}`"
-    class="flex flex-col gap-6 px-2 py-4 cursor-pointer hover:brightness-95 rounded-sm"
+    class="flex flex-col justify-between gap-6 px-2 py-4 cursor-pointer hover:brightness-95 rounded-sm"
   >
-    <NuxtImg :alt="title" :src="imgUrl" width="240" />
+    <NuxtImg :alt="title" :src="imgUrl" width="240" class="flex-grow" />
     <div class="flex flex-col gap-3">
       <div class="text-body-lg font-medium text-black-900 text-center lg:text-left">
         {{ title }}

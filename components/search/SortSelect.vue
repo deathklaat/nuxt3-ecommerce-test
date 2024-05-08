@@ -10,7 +10,7 @@ import {
 import { SortOptions } from '~/data/enums';
 
 const options = Object.entries(SortOptions).filter((option) => isNaN(Number(option[0])));
-const model = defineModel<SortOptions>();
+const model = defineModel<keyof typeof SortOptions>();
 </script>
 
 <template>
