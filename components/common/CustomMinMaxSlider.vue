@@ -1,6 +1,6 @@
 <script setup>
 // define component props for the slider component
-const { min, max, step, minValue, maxValue } = defineProps({
+const props = defineProps({
   min: {
     type: Number,
     default: 0,
@@ -22,7 +22,7 @@ const { min, max, step, minValue, maxValue } = defineProps({
     default: 80,
   },
 });
-
+//{ min, max, step, minValue, maxValue }
 // define emits for the slider component
 const emit = defineEmits(['update:minValue', 'update:maxValue']);
 
@@ -30,8 +30,13 @@ const emit = defineEmits(['update:minValue', 'update:maxValue']);
 const slider = ref(null);
 const inputMin = ref(null);
 const inputMax = ref(null);
-const sliderMinValue = ref(minValue);
-const sliderMaxValue = ref(maxValue);
+const sliderMinValue = ref(props.minValue);
+const sliderMaxValue = ref(props.maxValue);
+
+watchEffect(() => {
+  sliderMinValue.value = props.minValue;
+  sliderMaxValue.value = props.maxValue;
+});
 
 // function to get the percentage of a value between the min and max values
 const getPercent = (value, min, max) => {
@@ -53,13 +58,13 @@ const setCSSProps = (left, right) => {
 // when the slider values change
 watchEffect(() => {
   if (slider.value) {
-    // emit slidet values when updated
+    // emit slider values when updated
     emit('update:minValue', sliderMinValue.value);
     emit('update:maxValue', sliderMaxValue.value);
 
     // calculate values in percentages
-    const leftPercent = getPercent(sliderMinValue.value, min, max);
-    const rightPercent = 100 - getPercent(sliderMaxValue.value, min, max);
+    const leftPercent = getPercent(sliderMinValue.value, props.min, props.max);
+    const rightPercent = 100 - getPercent(sliderMaxValue.value, props.min, props.max);
 
     // set the CSS variables
     setCSSProps(leftPercent, rightPercent);

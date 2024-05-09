@@ -1,22 +1,14 @@
 <script lang="ts" setup>
-import type { ProductData, SearchParams } from '~/types/product.type';
+import type { FilterType, ProductData, SearchParams } from '~/types/product.type';
 import { SortOptions } from '~/data/enums';
 import BreadCrumbs from '~/components/common/BreadCrumbs.vue';
 
 const fakeApi = useFakeApi();
 const route = useRoute();
 const router = useRouter();
+const store = useProductStore();
 
-const breadcrumbs = computed(() => [
-  {
-    text: 'Ecommerce',
-    href: '/',
-  },
-  {
-    text: 'Search',
-  },
-]);
-
+const breadcrumbs = computed(() => [{ text: 'Ecommerce', href: '/' }, { text: 'Search' }]);
 const results = ref<ProductData[]>([]);
 
 async function applyFilters(filters: SearchParams, options?: { ignoreCheck: boolean }) {
@@ -77,7 +69,40 @@ async function applySort(newOrder: SortOptions) {
   await applyFilters(appliedFilters.value, { ignoreCheck: true });
 }
 
-function resetFilters() {}
+function resetFilters() {
+  const filters: SearchParams = {
+    query: appliedFilters.value.query,
+    sortOrder: appliedFilters.value.sortOrder,
+    priceRange: [0, store.highestPrice],
+    categories: [],
+    colors: [],
+    sizes: [],
+  };
+  applyFilters(filters);
+}
+
+function removeFilter({ type, value }: { type: FilterType; value: number }) {
+  const filters = structuredClone(appliedFilters.value);
+
+  switch (type) {
+    case 'priceRange':
+      filters.priceRange = [0, store.highestPrice];
+      break;
+    case 'sizes':
+      filters.sizes = (filters.sizes || []).filter((item) => item !== value);
+      break;
+    case 'categories':
+      filters.categories = (filters.categories || []).filter((item) => item !== value);
+      break;
+    case 'colors':
+      filters.colors = (filters.colors || []).filter((item) => item !== value);
+      break;
+    default:
+      break;
+  }
+
+  applyFilters(filters);
+}
 </script>
 
 <template>
@@ -87,11 +112,12 @@ function resetFilters() {}
     </div>
 
     <div class="container xl:max-w-[1116px] mt-8 mx-auto px-0 py-4 flex gap-5">
-      <SearchFilters @change="applyFilters" />
+      <SearchFilters :filters="appliedFilters" @change="applyFilters" />
       <SearchResults
         :filters="appliedFilters"
         :results="results"
         @sort-change="applySort"
+        @remove-filter="removeFilter"
         @reset-filters="resetFilters"
       />
     </div>

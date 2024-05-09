@@ -40,4 +40,4 @@ export type SearchParams = {
   sortOrder?: SortOptions;
 };
 
-export type FilterType = 'categories' | 'colors' | 'sizes';
+export type FilterType = 'categories' | 'colors' | 'sizes' | 'priceRange';

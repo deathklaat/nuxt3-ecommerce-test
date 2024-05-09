@@ -4,13 +4,16 @@ import { Checkbox } from '~/components/ui/checkbox';
 import CustomMinMaxSlider from '~/components/common/CustomMinMaxSlider.vue';
 import type { SearchParams } from '~/types/product.type';
 
+const props = defineProps<{
+  filters: SearchParams;
+}>();
+
 const emit = defineEmits<{
   change: [value: SearchParams]; // named tuple syntax
 }>();
 
 const store = useProductStore();
 const route = useRoute();
-const router = useRouter();
 
 const priceMin = ref(0);
 const priceMax = ref(store.highestPrice);
@@ -21,44 +24,42 @@ function notString(item: any) {
 
 // categories
 const categories = Object.values(Categories).filter(notString) as Categories[];
-const selectedCategories = ref<Record<string, boolean>>({});
-
-resetCategories();
-
-function resetCategories() {
-  categories.forEach((category) => (selectedCategories.value[category.toString()] = false));
-}
+const selectedCategories = ref<Categories[]>([]);
 
 function getCategoryId(category: Categories) {
   return `category-${category.toString().toLowerCase()}`;
 }
 
-// colors
-const colors = Object.values(Colors).filter(notString) as Colors[];
-const selectedColors = ref<Record<string, boolean>>({});
-
-resetColors();
-
-function resetColors() {
-  colors.forEach((color) => (selectedColors.value[color.toString()] = false));
+function selectCategory(category: Categories, isSelected: boolean) {
+  if (isSelected) {
+    selectedCategories.value.push(category);
+  } else {
+    selectedCategories.value = selectedCategories.value.filter((c) => c !== category);
+  }
 }
 
+// colors
+const colors = Object.values(Colors).filter(notString) as Colors[];
+const selectedColors = ref<Colors[]>([]);
+
 function selectColor(color: Colors) {
-  selectedColors.value[color] = !selectedColors.value[color];
+  if (selectedColors.value.includes(color)) {
+    selectedColors.value = selectedColors.value.filter((c) => c !== color);
+  } else {
+    selectedColors.value.push(color);
+  }
 }
 
 // sizes
 const sizes = Object.values(Sizes).filter(notString) as Sizes[];
-const selectedSizes = ref<Record<string, boolean>>({});
-
-resetSizes();
-
-function resetSizes() {
-  sizes.forEach((color) => (selectedSizes.value[color.toString()] = false));
-}
+const selectedSizes = ref<Sizes[]>([]);
 
 function selectSize(size: Sizes) {
-  selectedSizes.value[size] = !selectedSizes.value[size];
+  if (selectedSizes.value.includes(size)) {
+    selectedSizes.value = selectedSizes.value.filter((s) => s !== size);
+  } else {
+    selectedSizes.value.push(size);
+  }
 }
 
 const searchQuery = computed(() => decodeURIComponent(route.query.query as string));
@@ -70,69 +71,48 @@ function applyFilters() {
     priceRange: [0, 0],
   };
 
-  if (!filters.query) {
-    router.replace({ query: {} });
+  if (selectedCategories.value.length) {
+    filters.categories = selectedCategories.value;
   }
 
-  // collect categories
-  const pickedCategories = Object.keys(selectedCategories.value)
-    .filter((key) => selectedCategories.value[key])
-    .map(Number);
+  if (selectedColors.value.length) {
+    filters.colors = selectedColors.value;
+  }
 
-  if (pickedCategories.length) filters.categories = pickedCategories;
+  if (selectedSizes.value.length) {
+    filters.sizes = selectedSizes.value;
+  }
 
-  // collect colors
-  const pickedColors = Object.keys(selectedColors.value)
-    .filter((key) => selectedColors.value[key])
-    .map(Number);
-
-  if (pickedColors.length) filters.colors = pickedColors;
-
-  // collect sizes
-  const pickedSizes = Object.keys(selectedSizes.value)
-    .filter((key) => selectedSizes.value[key])
-    .map(Number);
-
-  if (pickedSizes.length) filters.sizes = pickedSizes;
-
-  // collect price range
-  filters.priceRange = [priceMin.value || 0, priceMax.value || 0];
+  filters.priceRange = [priceMin.value || 0, priceMax.value || store.highestPrice];
 
   emit('change', filters);
 }
 
-/*watch(
-  () => store.searchFilters,
+watch(
+  () => props.filters,
   (newValue) => {
-    resetCategories();
-    if (newValue.categories?.length) {
-      newValue.categories.forEach((category: number) => {
-        selectedCategories.value[Categories[category]] = true;
-      });
+    if (newValue.categories) {
+      selectedCategories.value = newValue.categories;
     }
 
-    resetColors();
-    if (newValue.colors?.length) {
-      newValue.colors.forEach((color) => {
-        const key = Object.entries(Colors).find(([_, value]) => value === color)![0];
-        selectedColors.value[key] = true;
-      });
+    if (newValue.sizes) {
+      selectedSizes.value = newValue.sizes;
     }
 
-    resetSizes();
-    if (newValue.sizes?.length) {
-      newValue.sizes.forEach((size) => (selectedSizes.value[size] = true));
+    if (newValue.colors) {
+      selectedColors.value = newValue.colors;
     }
 
-    if (newValue.priceRange?.length && newValue.priceRange[1] > 0) {
+    if (newValue.priceRange?.length) {
       priceMin.value = newValue.priceRange[0];
       priceMax.value = newValue.priceRange[1];
     }
   },
   {
     deep: true,
+    immediate: true,
   },
-);*/
+);
 </script>
 
 <template>
@@ -149,8 +129,8 @@ function applyFilters() {
         >
           <Checkbox
             :id="getCategoryId(category)"
-            :checked="selectedCategories[category]"
-            @update:checked="selectedCategories[category] = $event"
+            :checked="selectedCategories.includes(category)"
+            @update:checked="selectCategory(category, $event)"
           />
           <label :for="getCategoryId(category)" class="text-body-lg text-black-600">
             {{ $t(`Categories.${Categories[category]}`) }}
@@ -165,7 +145,7 @@ function applyFilters() {
         <ProductColor
           v-for="(color, i) in colors"
           :key="i"
-          :active="selectedColors[color]"
+          :active="selectedColors.includes(color)"
           :color="color"
           @select="selectColor"
         />
@@ -178,7 +158,7 @@ function applyFilters() {
         <ProductSize
           v-for="(size, i) in sizes"
           :key="i"
-          :active="selectedSizes[size]"
+          :active="selectedSizes.includes(size)"
           :size="size"
           @select="selectSize"
         />
@@ -189,8 +169,9 @@ function applyFilters() {
       <div class="text-body-lg font-medium text-black-900">Price</div>
       <div class="mt-6">
         <CustomMinMaxSlider
-          v-model:max-value="priceMax"
+          ref="slider"
           v-model:min-value="priceMin"
+          v-model:max-value="priceMax"
           :max="store.highestPrice"
           :min="0"
         />
