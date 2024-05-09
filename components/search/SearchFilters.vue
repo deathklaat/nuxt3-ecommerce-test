@@ -15,8 +15,12 @@ const router = useRouter();
 const priceMin = ref(0);
 const priceMax = ref(store.highestPrice);
 
+function notString(item: any) {
+  return typeof item !== 'string';
+}
+
 // categories
-const categories = Object.values(Categories).filter((v) => isNaN(Number(v)));
+const categories = Object.values(Categories).filter(notString) as Categories[];
 const selectedCategories = ref<Record<string, boolean>>({});
 
 resetCategories();
@@ -25,12 +29,12 @@ function resetCategories() {
   categories.forEach((category) => (selectedCategories.value[category.toString()] = false));
 }
 
-function getCategoryId(category: string | Categories) {
+function getCategoryId(category: Categories) {
   return `category-${category.toString().toLowerCase()}`;
 }
 
 // colors
-const colors = Object.keys(Colors).filter((v) => isNaN(Number(v)));
+const colors = Object.values(Colors).filter(notString) as Colors[];
 const selectedColors = ref<Record<string, boolean>>({});
 
 resetColors();
@@ -39,12 +43,12 @@ function resetColors() {
   colors.forEach((color) => (selectedColors.value[color.toString()] = false));
 }
 
-function selectColor(color: string | Colors) {
+function selectColor(color: Colors) {
   selectedColors.value[color] = !selectedColors.value[color];
 }
 
 // sizes
-const sizes = Object.values(Sizes).filter((v) => isNaN(Number(v)));
+const sizes = Object.values(Sizes).filter(notString) as Sizes[];
 const selectedSizes = ref<Record<string, boolean>>({});
 
 resetSizes();
@@ -70,18 +74,28 @@ function applyFilters() {
     router.replace({ query: {} });
   }
 
-  filters.categories = Object.keys(selectedCategories.value)
+  // collect categories
+  const pickedCategories = Object.keys(selectedCategories.value)
     .filter((key) => selectedCategories.value[key])
-    .map((key) => Categories[key]);
+    .map(Number);
 
-  filters.colors = Object.keys(selectedColors.value)
+  if (pickedCategories.length) filters.categories = pickedCategories;
+
+  // collect colors
+  const pickedColors = Object.keys(selectedColors.value)
     .filter((key) => selectedColors.value[key])
-    .map((key) => Colors[key]);
+    .map(Number);
 
-  filters.sizes = Object.keys(selectedSizes.value).filter(
-    (key) => selectedSizes.value[key],
-  ) as Sizes[];
+  if (pickedColors.length) filters.colors = pickedColors;
 
+  // collect sizes
+  const pickedSizes = Object.keys(selectedSizes.value)
+    .filter((key) => selectedSizes.value[key])
+    .map(Number);
+
+  if (pickedSizes.length) filters.sizes = pickedSizes;
+
+  // collect price range
   filters.priceRange = [priceMin.value || 0, priceMax.value || 0];
 
   emit('change', filters);
@@ -139,7 +153,7 @@ function applyFilters() {
             @update:checked="selectedCategories[category] = $event"
           />
           <label :for="getCategoryId(category)" class="text-body-lg text-black-600">
-            {{ category }}
+            {{ $t(`Categories.${Categories[category]}`) }}
           </label>
         </div>
       </div>

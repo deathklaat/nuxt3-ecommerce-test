@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import type { Sizes } from '~/data/enums';
-
+import { Sizes } from '~/data/enums';
 defineProps<{
   active: boolean;
   size: Sizes;
@@ -14,7 +13,7 @@ defineEmits<{
 <template>
   <div :class="{ 'size--active': active }" class="size" @click="$emit('select', size)">
     <span class="text-label-lg font-medium text-black-500">
-      {{ size }}
+      {{ $t(`Sizes.${Sizes[size]}`) }}
     </span>
   </div>
 </template>

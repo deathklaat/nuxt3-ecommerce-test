@@ -9,8 +9,10 @@ import {
 } from '@/components/ui/select';
 import { SortOptions } from '~/data/enums';
 
-const options = Object.entries(SortOptions).filter((option) => isNaN(Number(option[0])));
-const model = defineModel<keyof typeof SortOptions>();
+const options = Object.values(SortOptions).filter(
+  (item) => typeof item !== 'string',
+) as SortOptions[];
+const model = defineModel<string>();
 </script>
 
 <template>
@@ -20,8 +22,8 @@ const model = defineModel<keyof typeof SortOptions>();
     </SelectTrigger>
     <SelectContent>
       <SelectGroup>
-        <SelectItem v-for="[key, text] in options" :key="key" :value="key">
-          {{ text }}
+        <SelectItem v-for="option in options" :key="option" :value="option.toString()">
+          {{ $t(`SortOptions.${SortOptions[option]}`) }}
         </SelectItem>
       </SelectGroup>
     </SelectContent>

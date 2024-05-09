@@ -1,6 +1,6 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { ProductData, SearchParams } from '~/types/product.type';
-import { Colors, Sizes, type SortOptions } from '~/data/enums';
+import { SortOptions } from '~/data/enums';
 import BreadCrumbs from '~/components/common/BreadCrumbs.vue';
 
 const fakeApi = useFakeApi();
@@ -19,7 +19,11 @@ const breadcrumbs = computed(() => [
 
 const results = ref<ProductData[]>([]);
 
-async function applyFilters(filters: SearchParams) {
+async function applyFilters(filters: SearchParams, options?: { ignoreCheck: boolean }) {
+  if (!options?.ignoreCheck && JSON.stringify(filters) === JSON.stringify(appliedFilters.value)) {
+    return;
+  }
+
   await router.replace({ query: filters });
   results.value = await fakeApi.search(filters);
 }
@@ -43,30 +47,34 @@ const appliedFilters = computed(() => {
 
   if (query.colors) {
     filters.colors = Array.isArray(query.colors)
-      ? query.colors.map((c) => c as Colors)
-      : [query.colors as Colors];
+      ? query.colors.map(Number)
+      : [Number(query.colors)];
   }
 
   if (query.sizes) {
-    filters.sizes = Array.isArray(query.sizes)
-      ? query.sizes.map((s) => s as Sizes)
-      : [query.sizes as Sizes];
+    filters.sizes = Array.isArray(query.sizes) ? query.sizes.map(Number) : [Number(query.sizes)];
   }
 
   if (query.sortOrder) {
-    filters.sortOrder = query.sortOrder as SortOptions;
+    filters.sortOrder = Number(query.sortOrder);
   }
 
   return filters;
 });
 
-applyFilters(appliedFilters.value);
+applyFilters(appliedFilters.value, { ignoreCheck: true });
 
-function applySort(newOrder: SortOptions) {
-  // TODO: check it
-  const query = { ...route.query };
-  query.sortOrder = newOrder;
-  router.replace({ query });
+async function applySort(newOrder: SortOptions) {
+  if (appliedFilters.value.sortOrder === newOrder) return;
+
+  const query = {
+    ...route.query,
+    sortOrder: newOrder.toString(),
+  };
+
+  await router.replace({ query });
+  await nextTick();
+  await applyFilters(appliedFilters.value, { ignoreCheck: true });
 }
 
 function resetFilters() {}
@@ -81,9 +89,9 @@ function resetFilters() {}
     <div class="container xl:max-w-[1116px] mt-8 mx-auto px-0 py-4 flex gap-5">
       <SearchFilters @change="applyFilters" />
       <SearchResults
-        :results="results"
         :filters="appliedFilters"
-        @sort="applySort"
+        :results="results"
+        @sort-change="applySort"
         @reset-filters="resetFilters"
       />
     </div>

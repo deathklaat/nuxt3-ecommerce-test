@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { Colors } from '~/data/enums';
+import { Colors } from '~/data/enums';
 
 defineProps<{
   active: boolean;
-  color: string | Colors;
+  color: Colors;
 }>();
 
 defineEmits<{
-  select: [value: string | Colors];
+  select: [value: Colors];
 }>();
 </script>
 
@@ -17,7 +17,7 @@ defineEmits<{
     class="flex items-center justify-center rounded-full h-8 w-8 cursor-pointer"
     @click="$emit('select', color)"
   >
-    <div :class="`color--${color.toString().toLowerCase()}`" class="w-6 h-6 rounded-full" />
+    <div :class="`color--${Colors[color].toString().toLowerCase()}`" class="w-6 h-6 rounded-full" />
   </div>
 </template>
 

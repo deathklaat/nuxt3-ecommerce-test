@@ -1,0 +1,29 @@
+{
+  "Sizes": {
+    "Small": "S",
+    "Medium": "M",
+    "Large": "L",
+    "ExtraLarge": "XL",
+    "ExtraExtraLarge": "XXL"
+  },
+  "Colors": {
+    "Blue": "Blue",
+    "Yellow": "Yellow",
+    "Green": "Green",
+    "Red": "Red"
+  },
+  "Categories": {
+    "Perfume": "Perfume",
+    "Trousers": "Trousers",
+    "Shoe": "Shoe",
+    "Handbag": "Handbag",
+    "Hat": "Hat",
+    "Thermos": "Thermos"
+  },
+  "SortOptions": {
+    "CheapFirst": "Cheap first",
+    "ExpensiveFirst": "Expensive first",
+    "Popular": "Popular",
+    "Newest": "Newest"
+  }
+}

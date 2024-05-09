@@ -35,6 +35,7 @@
     "@nuxt/eslint-config": "^0.3.6",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
+    "@nuxtjs/i18n": "npm:@nuxtjs/i18n-edge",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",

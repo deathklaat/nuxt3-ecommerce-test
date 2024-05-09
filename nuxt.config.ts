@@ -1,3 +1,5 @@
+import locales from './locales';
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
@@ -18,6 +20,7 @@ export default defineNuxtConfig({
     ],
     '@nuxt/image',
     'shadcn-nuxt',
+    '@nuxtjs/i18n',
   ],
   pinia: {
     storesDirs: ['./store/**'],
@@ -32,5 +35,13 @@ export default defineNuxtConfig({
      * @default "./components/ui"
      */
     componentDir: './components/ui',
+  },
+  i18n: {
+    lazy: true,
+    langDir: 'locales',
+    locales,
+    defaultLocale: 'en',
+    detectBrowserLanguage: false,
+    strategy: 'no_prefix',
   },
 });

@@ -12,16 +12,17 @@ const props = defineProps<{
 const emit = defineEmits<{
   'reset-filters': [];
   'remove-filter': [value: { type: FilterType; value: any }];
-  'sort-change': [value: keyof typeof SortOptions];
+  'sort-change': [value: SortOptions];
 }>();
 
+// TODO: make it work
 const appliedFilters = computed(() => {
   return [];
 });
 
-const sortOption = ref<keyof typeof SortOptions>();
-watch(sortOption, (newOrder) => {
-  emit('sort-change', newOrder || 'Newest');
+const sortOption = ref<string>((props.filters.sortOrder || SortOptions.Newest).toString());
+watch(sortOption, (newOrder: string) => {
+  emit('sort-change', Number(newOrder) as SortOptions);
 });
 
 function resetFilters() {

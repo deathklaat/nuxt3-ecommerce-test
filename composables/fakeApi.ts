@@ -76,10 +76,10 @@ export const useFakeApi = () => {
     }
 
     // fake clone results to force pagination
-    const multipleResults = [];
-    for (let i = 0; i < 20; i++) {
-      multipleResults.push(...result);
-    }
+    // const multipleResults = [];
+    // for (let i = 0; i < 20; i++) {
+    //   multipleResults.push(...result);
+    // }
 
     switch (filters.sortOrder) {
       case SortOptions.Popular:
@@ -91,7 +91,6 @@ export const useFakeApi = () => {
       case SortOptions.ExpensiveFirst:
         result.sort(sortExpensiveFirst);
         break;
-      case SortOptions.Newest:
       default:
         result.sort(sortNewest);
         break;
