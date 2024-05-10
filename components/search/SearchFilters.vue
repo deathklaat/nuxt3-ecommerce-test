@@ -105,7 +105,7 @@ watch(
 
     if (newValue.priceRange?.length) {
       priceMin.value = newValue.priceRange[0];
-      priceMax.value = newValue.priceRange[1];
+      priceMax.value = newValue.priceRange[1] || store.highestPrice;
     }
   },
   {

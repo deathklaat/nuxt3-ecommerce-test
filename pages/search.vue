@@ -111,7 +111,7 @@ function removeFilter({ type, value }: { type: FilterType; value: number }) {
       <BreadCrumbs :items="breadcrumbs" />
     </div>
 
-    <div class="container xl:max-w-[1116px] mt-8 mx-auto px-0 py-4 flex gap-5">
+    <div class="container items-start xl:max-w-[1116px] mt-8 mx-auto px-0 py-4 flex gap-5 mb-32">
       <SearchFilters :filters="appliedFilters" @change="applyFilters" />
       <SearchResults
         :filters="appliedFilters"

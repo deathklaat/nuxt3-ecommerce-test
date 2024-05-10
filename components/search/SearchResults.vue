@@ -18,15 +18,21 @@ const emit = defineEmits<{
 const store = useProductStore();
 
 const appliedFilters = computed<any>(() => {
-  return Object.entries(props.filters)
+  const res = Object.entries(props.filters)
     .filter(([filterName]) => !['query', 'sortOrder'].includes(filterName))
     .map(([type, value]) => ({ type, value }));
+
+  if (res.length === 1 && res[0].type === 'priceRange') {
+    const value = res[0].value as [number, number];
+    if (value[0] === 0 && value[1] === store.highestPrice) return [];
+    if (value[0] === 0 && value[1] === 0) return [];
+  }
+
+  return res;
 });
 
 const sortOption = ref<string>((props.filters.sortOrder || SortOptions.Newest).toString());
-watch(sortOption, (newOrder: string) => {
-  emit('sort-change', Number(newOrder) as SortOptions);
-});
+watch(sortOption, (newOrder: string) => emit('sort-change', Number(newOrder) as SortOptions));
 
 function resetFilters() {
   emit('reset-filters');
@@ -35,17 +41,11 @@ function resetFilters() {
 function removeFilter(type: FilterType, value: any) {
   emit('remove-filter', { type, value });
 }
-
-function isPriceRange(filter: { type: string; value: number[] | [number, number] }) {
-  return (
-    filter.type === 'priceRange' && (filter.value[0] > 0 || filter.value[1] < store.highestPrice)
-  );
-}
 </script>
 
 <template>
   <div class="flex flex-col w-full">
-    <div v-if="appliedFilters.length > 1" class="flex flex-col gap-3">
+    <div v-if="appliedFilters.length" class="flex flex-col gap-3">
       <div class="relative text-body-lg font-medium text-black-900">
         Applied filters:
         <div
@@ -91,7 +91,7 @@ function isPriceRange(filter: { type: string; value: number[] | [number, number]
             </div>
           </template>
           <div
-            v-if="isPriceRange(filter)"
+            v-if="filter.type === 'priceRange'"
             class="filter-item"
             @click="removeFilter('priceRange', 0)"
           >
@@ -101,7 +101,10 @@ function isPriceRange(filter: { type: string; value: number[] | [number, number]
         </template>
       </div>
     </div>
-    <div class="flex items-center justify-between mt-6 w-full">
+    <div
+      class="flex items-center justify-between w-full max-w-[824px]"
+      :class="{ 'mt-6': appliedFilters.length }"
+    >
       <div>
         <span v-if="filters.query?.length">
           {{ results.length }} products found for "{{ filters.query }}"
@@ -110,7 +113,7 @@ function isPriceRange(filter: { type: string; value: number[] | [number, number]
       </div>
       <SortSelect v-model="sortOption" />
     </div>
-    <div v-if="results.length" class="flex flex-wrap mt-4">
+    <div v-if="results.length" class="flex flex-wrap justify-between mt-4 gap-x-5 gap-y-3">
       <ProductCard v-for="(card, index) in results" :key="`${card.id}-${index}`" v-bind="card" />
     </div>
   </div>
