@@ -1,6 +1,7 @@
 import { Categories, Colors, Sizes, SortOptions } from '~/data/enums';
 
 export type ProductReview = {
+  id: number;
   firstName: string;
   lastName: string;
   publishedAt: string;

@@ -1,5 +1,6 @@
 export default [
   {
+    id: 1,
     firstName: 'Emily',
     lastName: 'Davis',
     publishedAt: '2024-03-21 12:00:00',
@@ -7,6 +8,7 @@ export default [
     content: 'This company always goes above and beyond to satisfy their customers.',
   },
   {
+    id: 2,
     firstName: 'Daniel',
     lastName: 'Smith',
     publishedAt: '2024-03-16 12:00:00',
@@ -14,6 +16,7 @@ export default [
     content: "I can't believe how affordable and high-quality this item is!",
   },
   {
+    id: 3,
     firstName: 'Benjamin',
     lastName: 'Clark',
     publishedAt: '2024-02-05 12:00:00',
