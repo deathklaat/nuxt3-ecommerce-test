@@ -8,6 +8,8 @@ const props = defineProps<{
   data: ProductData;
 }>();
 
+const store = useProductStore();
+
 const orderParams = defineModel<OrderParams>();
 
 const reviewsSummary = computed(() => {
@@ -18,12 +20,32 @@ const reviewsSummary = computed(() => {
   return { averageRating, reviewsTotal };
 });
 
+const cartButtonText = computed(() => {
+  return store.isInCart(props.data.id) ? 'Remove from cart' : 'Add to cart';
+});
+
 function selectColor(color: Colors) {
   orderParams.value!.color = color;
 }
 
 function selectSize(size: Sizes) {
   orderParams.value!.size = size;
+}
+
+function toggleFavorite() {
+  if (store.isInFavorites(props.data.id)) {
+    store.removeFromFavorites(props.data.id);
+  } else {
+    store.addToFavorites(props.data.id);
+  }
+}
+
+function handleCartClick() {
+  if (store.isInCart(props.data.id)) {
+    store.removeFromCart(props.data.id);
+  } else {
+    store.addToCart(props.data.id, orderParams.value!.quantity);
+  }
 }
 </script>
 
@@ -58,8 +80,8 @@ function selectSize(size: Sizes) {
         <ProductColor
           v-for="(color, i) in data.colors"
           :key="i"
-          :color="color"
           :active="color === orderParams!.color"
+          :color="color"
           @select="selectColor"
         />
       </div>
@@ -71,8 +93,8 @@ function selectSize(size: Sizes) {
         <ProductSize
           v-for="(size, i) in data.sizes"
           :key="i"
-          :size="size"
           :active="size === orderParams!.size"
+          :size="size"
           @select="selectSize"
         />
       </div>
@@ -84,8 +106,10 @@ function selectSize(size: Sizes) {
     </div>
 
     <div class="mt-10 flex items-center gap-4">
-      <Button class="w-[284px]">
-        <span class="text-body-lg font-medium text-white-900 select-none">Add to cart</span>
+      <Button class="w-[284px]" @click="handleCartClick">
+        <span class="text-body-lg font-medium text-white-900 select-none">
+          {{ cartButtonText }}
+        </span>
       </Button>
       <div
         :class="`
@@ -93,7 +117,14 @@ function selectSize(size: Sizes) {
               hover:brightness-95
           `"
       >
-        <HeartIcon class="size-6 stroke-black-500" />
+        <HeartIcon
+          :class="{
+            'fill-black-700 stroke-black-700': store.isInFavorites(data.id),
+            'stroke-black-500': !store.isInFavorites(data.id),
+          }"
+          class="size-6"
+          @click="toggleFavorite"
+        />
       </div>
     </div>
 

@@ -7,7 +7,7 @@ const props = defineProps<{
 }>();
 
 const quantity = defineModel<number>();
-const minValue = computed(() => props.min || 0);
+const minValue = computed(() => props.min || 1);
 const maxValue = computed(() => props.max || Infinity);
 
 function decrease() {

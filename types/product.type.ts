@@ -25,6 +25,11 @@ export type ProductData = {
   createdAt: string;
 };
 
+export type CartProduct = {
+  productId: number;
+  amount: number;
+};
+
 export type OrderParams = {
   productId: number;
   size: Sizes;

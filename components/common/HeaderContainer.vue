@@ -8,6 +8,7 @@ import NavBar from '~/components/common/NavBar.vue';
 import SearchInput from '~/components/common/SearchInput.vue';
 
 const { isTabletOrDesktop } = useResolution();
+const store = useProductStore();
 </script>
 
 <template>
@@ -26,8 +27,16 @@ const { isTabletOrDesktop } = useResolution();
     <div id="mobile-menu" class="absolute inset-0" />
     <div v-if="isTabletOrDesktop" class="flex items-center gap-5">
       <SearchInput />
-      <NuxtLink to="/">
+      <NuxtLink to="/cart" class="relative">
         <ShoppingCartIcon class="size-5 text-muted-foreground cursor-pointer" />
+        <div
+          v-if="store.cart.length"
+          class="flex items-center justify-center absolute top-[-12px] right-[-16px] bg-green-100 rounded-full min-w-5 min-h-5"
+        >
+          <span class="text-[10px]">
+            {{ store.cart.length }}
+          </span>
+        </div>
       </NuxtLink>
       <NuxtLink to="/">
         <CircleUserRoundIcon class="size-5 text-muted-foreground cursor-pointer" />
