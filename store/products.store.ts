@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { useSlugify } from '~/composables/slugify';
-import type { CartProduct, ProductData } from '~/types/product.type';
+import type { CartProduct, OrderParams, ProductData } from '~/types/product.type';
 import productData from '~/data/product.data';
 
 const { toSlug } = useSlugify();
@@ -45,13 +45,13 @@ export const useProductStore = defineStore('products', () => {
     return products.value.reduce((acc, val) => Math.max(acc, val.price), 0);
   });
 
-  const addToCart = (productId: number, amount: number = 1) => {
+  const addToCart = (productId: number, orderParams: OrderParams) => {
     const cartProduct = cart.value.find((item) => item.productId === productId);
 
     if (cartProduct) {
-      cartProduct.amount = amount;
+      cartProduct.orderParams = orderParams;
     } else {
-      cart.value.push({ productId, amount });
+      cart.value.push({ productId, orderParams });
     }
   };
 
@@ -60,10 +60,10 @@ export const useProductStore = defineStore('products', () => {
 
     if (!cartProduct) return;
 
-    if (cartProduct.amount === 1) {
+    if (cartProduct.orderParams.quantity === 1) {
       cart.value = cart.value.filter((item) => item.productId !== productId);
     } else {
-      cartProduct.amount--;
+      cartProduct.orderParams.quantity--;
     }
   };
 

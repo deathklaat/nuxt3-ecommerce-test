@@ -44,7 +44,7 @@ function handleCartClick() {
   if (store.isInCart(props.data.id)) {
     store.removeFromCart(props.data.id);
   } else {
-    store.addToCart(props.data.id, orderParams.value!.quantity);
+    store.addToCart(props.data.id, orderParams.value!);
   }
 }
 </script>

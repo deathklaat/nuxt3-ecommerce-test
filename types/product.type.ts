@@ -27,7 +27,7 @@ export type ProductData = {
 
 export type CartProduct = {
   productId: number;
-  amount: number;
+  orderParams: OrderParams;
 };
 
 export type OrderParams = {

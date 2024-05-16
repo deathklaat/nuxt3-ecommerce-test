@@ -1,5 +1,5 @@
 export default [
-  { text: 'Home', href: '#' },
+  { text: 'Home', href: '/' },
   {
     text: 'Categories',
     hrefs: [
