@@ -1,4 +1,4 @@
-# Nuxt3 E-commerce Test Project
+# Nuxt3 E-commerce Demo Project (Work in Progress)
 [Based on Free Community Figma](https://www.figma.com/file/eYT5Y0wnod1VX8D2g4ZVIx/Ecommerce-Web-UI-Kit-(Community)?type=design&node-id=92-229&mode=design)
 
 ## Nuxt 3 Minimal Starter
