@@ -1,9 +1,26 @@
 # Nuxt3 E-commerce Demo Project (Work in Progress)
 [Based on Free Community Figma](https://www.figma.com/file/eYT5Y0wnod1VX8D2g4ZVIx/Ecommerce-Web-UI-Kit-(Community)?type=design&node-id=92-229&mode=design)
 
-## Nuxt 3 Minimal Starter
+# TODO
+### Design
+- [ ] Add screenshots
+- [ ] Checkout page
+- [ ] Payment result page: success / failure
+- [ ] Auth page
+- [ ] Profile pages (auth check middleware)
+- [ ] Admin pages ? TBD
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+### Architecture
+- [ ] Back-end storage: AppWrite or Express ?
+- [ ] Auth AppWrite / Express + JWT ?
+- [ ] Types refactoring depending on chosen backend implementation
+- [ ] Search refactoring
+
+### Functionality
+- [ ] Localization support
+- [ ] Move all texts to locales config
+- [ ] Add mobile and tablet views for all pages (home page is already done)
+- [ ] SEO / Structured data markup for demo
 
 ## Setup
 
